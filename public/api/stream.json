@@ -1,0 +1,42 @@
+{
+  "streamer": {
+    "name": "Top PnL Trader",
+    "wallet": "0x77c3c0a7f18345e9439a91c08c5c8f6b83225e45",
+    "status": "Live",
+    "sponsor": "Sponsored by $RUGDOG - Rug responsibly."
+  },
+  "positions": [
+    {
+      "symbol": "ETH-PERP",
+      "size": 120,
+      "entry_price": 3421.5,
+      "current_price": 3440.8,
+      "unrealized_pnl": 2316
+    },
+    {
+      "symbol": "BTC-PERP",
+      "size": 80,
+      "entry_price": 70350,
+      "current_price": 69890,
+      "unrealized_pnl": -36800
+    }
+  ],
+  "trade_log": [
+    {
+      "timestamp": "2025-06-12T22:16:17.548453",
+      "symbol": "ETH-PERP",
+      "side": "LONG",
+      "size": 120,
+      "entry_price": 3421.5
+    },
+    {
+      "timestamp": "2025-06-12T22:16:17.548458",
+      "symbol": "BTC-PERP",
+      "side": "SHORT",
+      "size": 80,
+      "entry_price": 70350
+    }
+  ],
+  "pnl": -34484,
+  "last_updated": "2025-06-12T22:19:46.512162"
+}
