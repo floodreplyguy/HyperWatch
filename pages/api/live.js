@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const WALLET = "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6";
+    const wallet = "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6";
 
     const response = await fetch("https://api.hyperliquid.xyz/info", {
       method: "POST",
@@ -9,12 +9,13 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         type: "userState",
-        user: WALLET
+        user: wallet
       })
     });
 
     if (!response.ok) {
-      return res.status(502).json({ error: "Upstream API failed" });
+      console.error("Hyperliquid responded with status:", response.status);
+      return res.status(502).json({ error: "Hyperliquid upstream failed" });
     }
 
     const result = await response.json();
@@ -35,10 +36,10 @@ export default async function handler(req, res) {
         };
       });
 
-    res.status(200).json({
+    return res.status(200).json({
       streamer: {
-        name: "Top PnL Trader",
-        wallet: WALLET,
+        name: "Top Wallet on HL",
+        wallet,
         status: "Live",
         sponsor: "Sponsored by $RUGDOG - Rug responsibly."
       },
@@ -48,7 +49,7 @@ export default async function handler(req, res) {
       last_updated: new Date().toISOString()
     });
   } catch (err) {
+    console.error("Internal error:", err.message);
     res.status(500).json({ error: "Internal Server Error", details: err.message });
   }
 }
-
