@@ -4,7 +4,7 @@ export default function Home() {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    fetch('/api/stream.json')
+    fetch('/api/live')
       .then(res => res.json())
       .then(setData)
   }, [])
