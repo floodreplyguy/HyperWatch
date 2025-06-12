@@ -4,7 +4,8 @@ export const config = {
 
 export default async function handler(req) {
   try {
-    const WALLET = "0x77c3c0a7f18345e9439a91c08c5c8f6b83225e45";
+   const WALLET = "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6";
+
 
     const response = await fetch("https://api.hyperliquid.xyz/info", {
       method: "POST",
