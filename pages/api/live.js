@@ -1,11 +1,6 @@
-export const config = {
-  runtime: "edge",
-};
-
-export default async function handler(req) {
+export default async function handler(req, res) {
   try {
-   const WALLET = "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6";
-
+    const WALLET = "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6";
 
     const response = await fetch("https://api.hyperliquid.xyz/info", {
       method: "POST",
@@ -19,7 +14,7 @@ export default async function handler(req) {
     });
 
     if (!response.ok) {
-      return new Response("Upstream API failed", { status: 502 });
+      return res.status(502).json({ error: "Upstream API failed" });
     }
 
     const result = await response.json();
@@ -40,27 +35,20 @@ export default async function handler(req) {
         };
       });
 
-    return new Response(
-      JSON.stringify({
-        streamer: {
-          name: "Top PnL Trader",
-          wallet: WALLET,
-          status: "Live",
-          sponsor: "Sponsored by $RUGDOG - Rug responsibly."
-        },
-        positions,
-        trade_log: [],
-        pnl: positions.reduce((acc, p) => acc + p.unrealized_pnl, 0),
-        last_updated: new Date().toISOString()
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    );
-  } catch (error) {
-    return new Response("Internal Server Error", { status: 500 });
+    res.status(200).json({
+      streamer: {
+        name: "Top PnL Trader",
+        wallet: WALLET,
+        status: "Live",
+        sponsor: "Sponsored by $RUGDOG - Rug responsibly."
+      },
+      positions,
+      trade_log: [],
+      pnl: positions.reduce((acc, p) => acc + p.unrealized_pnl, 0),
+      last_updated: new Date().toISOString()
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error", details: err.message });
   }
 }
+
