@@ -1,33 +1,42 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const cors = require('cors');
+import { useEffect, useState } from "react";
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+export default function Home() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-app.use(cors());
-app.use(express.json());
-
-app.post('/live', async (req, res) => {
-  const wallet = req.body.wallet || "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6";
-
-  try {
-    const response = await fetch("https://api.hyperliquid.xyz/info", {
+  useEffect(() => {
+    fetch("https://hyperproxy-python.evansmargintrad.repl.co/live", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        type: "userState",
-        user: wallet
+        wallet: "0x2c7b0430aF30EC885abF902996a9Fb011E59dEe6",
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        setData(json);
+        setLoading(false);
       })
-    });
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        setLoading(false);
+      });
+  }, []);
 
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: "Proxy error", message: err.message });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Proxy server running on port ${PORT}`);
-});
+  return (
+    <div style={{ padding: "2rem", fontFamily: "monospace" }}>
+      <h1>📺 HyperWatch Wallet Stream</h1>
+      {loading ? (
+        <p>Loading wallet stream...</p>
+      ) : data?.error ? (
+        <p style={{ color: "red" }}>Error: {data.error}</p>
+      ) : (
+        <pre style={{ whiteSpace: "pre-wrap" }}>
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      )}
+    </div>
+  );
+}
